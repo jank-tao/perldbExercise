@@ -30,78 +30,44 @@ sub Conn {
 	my $dbh = $self->{_dbh} = DBI->connect($database, $self->{_db_user}, $self->{_db_passwd}) or die "cant connect!";
 
 	if ($dbh) {
-		print "pgconnect ok!\n";
-		print "my $dbh->port();\n";
+		print "postgresql connect successful!\n";
 	}
 	else {
-		print "pgconnect false!\n";
-		print "my $dbh->port();\n";
+		print "pgconnect failed!\n";
 	}
 	return 0;
 }
 
-# my $driver = "Pg";
-# my $database_name = "exampledb";
-# my $host = "127.0.0.1";
-# my $port = "5432";
-# my $database = "dbi:$driver:dbname=$database_name; host=$host; port=$port";
-# my $db_user = "dbuser";
-# my $db_passwd = "password";
-
-# my $dbh = DBI->connect($database, $db_user, $db_passwd) or die "cant connect!";
-# if ($dbh) {
-# 	print "pgconnect ok!\n";
-# 	print "my $dbh->port();\n";
-# }
-# else {
-# 	print "pgconnect false!\n";
-# 	print "my $dbh->port();\n";
-# }
 
 sub SetNewConn {
 	my ($self, %h_info) = @_;
 }
 
-sub Prepare {
-	my $sql = shift;
-
-}
 
 sub SelectAll {
 	my ($self, $table_name) = @_;
 	my $sql = "select * from $table_name";
 	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
 	$sth->execute();
-	while (my @row = $sth->fetchrow_array()) {
-		print join("\t", @row) . "\n";
-	}
-	# my @arr = $sth->fetchrow_array();
-	# $sth->finish();
-	# return @arr;
-
-
+	my $ref_arr = $sth->fetchall_arrayref();
+	$sth->finish();
+	return $ref_arr;
 }
 
 sub Do {
-
+	my ( $self, $sql ) = @_;
+	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
+	my $status = $sth->execute();
+	# get result here...
+	print "sql: $sql\n";
+	print "sql execute status: $status\n";
+	use Carp::Assert;
+	assert($status > 0) if DEBUG;
+	$sth->finish();
 }
 
 sub DisConn {
 	my ($self) = @_;
 	$self->{_dbh}->disconnect();
 }
-
-
-# my $table_name = 'school_tbl';
-# my $sql = "select * from $table_name";
-# my $sth = $dbh->prepare($sql) or die "Syntax error: $!\n";
-# $sth->execute();
-#
-# while (my @row = $sth->fetchrow_array()) {
-# 	print join("\t", @row) . "\n";
-# }
-#
-# $sth->finish();
-# $dbh->disconnect();
-
 1;
