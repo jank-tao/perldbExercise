@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 BEGIN {
-	push( @INC, './');
+	push( @INC, './Model/');
 }
 
 use strict;
