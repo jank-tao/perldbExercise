@@ -1,6 +1,6 @@
 
 
-package storage;
+package Storage;
 
 use strict;
 use warnings;
@@ -20,13 +20,8 @@ sub new {
 
 sub readColumn {
 	my ($self, $column) = @_;
-	my $sql = "select $column from storage";
-
 	my $object = new testDB();
-	my $status = $object->Conn();
-	my $ref_arr = $object->SelectColumn($sql);
-
-	$object->DisConn();
+	my $ref_arr = $object->GetStorageColumn($column);
 	return $ref_arr;
 }
 1;

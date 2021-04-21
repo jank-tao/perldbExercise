@@ -39,11 +39,6 @@ sub Conn {
 }
 
 
-# sub SetNewConn {
-# 	my ($self, %h_info) = @_;
-# }
-
-
 # sub SelectAll {
 # 	my ($self, $table_name) = @_;
 # 	my $sql = "select * from $table_name";
@@ -54,10 +49,14 @@ sub Conn {
 # 	return $ref_arr;
 # }
 
-sub SelectColumn {
-	my $sth = &doSQL(@_);
+sub GetStorageColumn {
+	my ($self, $column) = @_;
+	$self->Conn();
+	my $sql = "select $column from storage";
+	my $sth = $self->doSQL($sql);
 	my $ref_arr = $sth->fetchall_arrayref();
 	$sth->finish();
+	$self->DisConn();
 	return $ref_arr;
 }
 

@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 BEGIN {
-	push( @INC, './Model/');
+	push( @INC, './Model/' );
+	push( @INC, './Table/' );
 }
 
 use strict;
@@ -9,7 +10,7 @@ use warnings;
 use Time::Moment;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use testDB;
-use storage;
+use Storage;
 
 # my $object = new testDB();
 # my $status = $object->Conn();
@@ -43,10 +44,10 @@ use storage;
 # 	$object->Do($sql);
 # }
 
-sub readColumnFromStorage {
-	my $column = shift;
-	my $sto_object = new storage();
-	my $ref_rows = $sto_object->readColumn($column);
+sub readNameFromStorage {
+	my $name = shift;
+	my $sto_object = new Storage();
+	my $ref_rows = $sto_object->readColumn($name);
 	# got result here...
 	foreach my $data (@$ref_rows) {
 		print join("\t", @$data) . "\n";
@@ -54,6 +55,6 @@ sub readColumnFromStorage {
 }
 
 
-&readColumnFromStorage('name');
+&readNameFromStorage('name');
 
 
