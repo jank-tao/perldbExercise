@@ -12,49 +12,54 @@ use Digest::MD5 qw(md5 md5_hex md5_base64);
 use testDB;
 use Storage;
 
-# my $object = new testDB();
-# my $status = $object->Conn();
-#
-# sub createSQL {
-# 	my $server_tb = 'server';
-# 	my $server_name = 'vm9';
-# 	my $operating_system = 'Unix';
-# 	my $storage_name = 'sto3';
-# 	my $checksum = md5_base64($server_name, $operating_system, $storage_name);
-# 	my $sql = qq( INSERT INTO $server_tb VALUES ('$server_name', '$operating_system', '$storage_name', '$checksum'); );
-# 	$object->Do($sql);
-# }
-#
-# sub readSQL {
-# 	my $ref_rows = $object->SelectAll('server');
-# 	foreach my $data ( @$ref_rows ) {
-# 		print join("\t", @$data) . "\n";
-# 	}
-# }
-#
-# sub updateSQL {
-# 	my $tb = 'storage';
-# 	my $sql = " UPDATE $tb SET capacity = 99 WHERE name = 'sto1' ";
-# 	$object->Do($sql);
-# }
-#
-# sub deleteSQL {
-# 	my $tb = 'server';
-# 	my $sql = " DELETE FROM $tb WHERE name = 'vm2' ";
-# 	$object->Do($sql);
-# }
 
-sub readNameFromStorage {
-	my $name = shift;
-	my $sto_object = new Storage();
-	my $ref_rows = $sto_object->readColumn($name);
-	# got result here...
+sub OutputRows {
+	my $ref_rows = shift;
 	foreach my $data (@$ref_rows) {
 		print join("\t", @$data) . "\n";
 	}
 }
 
+sub readNameFromStorage {
+	my $sto_object = &Storage::getInstance();
+	my $ref_rows = $sto_object->readName();
+	&OutputRows($ref_rows);
+}
 
-&readNameFromStorage('name');
+sub readAllFromStorage {
+	my $sto_object = &Storage::getInstance();
+	my $ref_rows = $sto_object->readAll();
+	&OutputRows($ref_rows);
+}
 
+sub createStorage {
+	my $attr = shift;
+	my $sto_object = &Storage::getInstance();
+	$sto_object->{_name} = $attr->{name};
+	$sto_object->{_capacity} = $attr->{capacity};
+	$sto_object->createData();
+}
+
+sub deleteStorageByName {
+	my $attr = shift;
+	my $sto_object = &Storage::getInstance();
+	$sto_object->{_name} = $attr->{name};
+	$sto_object->deleteByName();
+}
+
+sub updateCapacityStorageByName {
+	my $attr = shift;
+	my $sto_object = &Storage::getInstance();
+	$sto_object->{_name} = $attr->{name};
+	$sto_object->{_capacity} = $attr->{capacity};
+	$sto_object->updateCapByName();
+}
+
+
+
+#&readNameFromStorage();
+#&readAllFromStorage();
+#&createStorage({name => 'sto88', capacity => 200});
+#&deleteStorageByName({name => 'sto88',});
+#&updateCapacityStorageByName({name => 'sto1', capacity => 233});
 
