@@ -5,6 +5,7 @@ package testDB;
 use strict;
 use warnings;
 use DBI;
+use Try::Tiny qw(try catch);
 
 sub new {
 	my $class = shift;
@@ -50,13 +51,11 @@ sub Do {
 
 sub doSQL {
 	my ( $self, $sql ) = @_;
-	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
-	my $status = $sth->execute();
-	# get result here...
 	print "sql: $sql\n";
-	print "sql execute status: $status\n";
-	use Carp::Assert;
-	assert($status > 0) if DEBUG;
+	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
+	try {
+		$sth->execute();
+	} catch {};
 	return $sth;
 }
 
@@ -108,6 +107,65 @@ sub UpdateCapByName {
 	my $name = $sto_obj->{_name};
 	my $capacity = $sto_obj->{_capacity};
 	my $sql = qq( UPDATE storage SET capacity = $capacity WHERE name = '$name' );
+	my $sth = $self->doSQL($sql);
+	$sth->finish();
+	$self->DisConn();
+}
+
+# -------- storage above --------
+# -------- server below  --------
+
+sub GetServerName {
+	my ( $self ) = @_;
+	return $self->GetServerColumn('name');
+}
+
+sub GetServerColumn {
+	my ( $self, $column ) = @_;
+	$self->Conn();
+	my $sql = "select $column from server";
+	my $sth = $self->doSQL($sql);
+	my $ref_arr = $sth->fetchall_arrayref();
+	$sth->finish();
+	$self->DisConn();
+	return $ref_arr;
+}
+
+sub GetServerAll {
+	my ( $self ) = @_;
+	return $self->GetServerColumn('*');
+}
+
+sub InsertIntoServer {
+	my ( $self, $server_obj ) = @_;
+	$self->Conn();
+	my $name = $server_obj->{_name};
+	my $operating_system = $server_obj->{_operating_system};
+	my $storage_name = $server_obj->{_storage_name};
+	use Digest::MD5 qw(md5 md5_hex md5_base64);
+	my $checksum = md5_base64($name, $operating_system, $storage_name);
+	my $sql = qq( INSERT INTO server VALUES ('$name', '$operating_system', '$storage_name', '$checksum'); );
+	my $sth = $self->doSQL($sql);
+	$sth->finish();
+	$self->DisConn();
+}
+
+sub DeleteFromServer {
+	my ( $self, $server_obj ) = @_;
+	$self->Conn();
+	my $name = $server_obj->{_name};
+	my $sql = qq( DELETE FROM server WHERE name = '$name' );
+	my $sth = $self->doSQL($sql);
+	$sth->finish();
+	$self->DisConn();
+}
+
+sub UpdateServerByName {
+	my ( $self, $server_obj ) = @_;
+	$self->Conn();
+	my $name = $server_obj->{_name};
+	my $storage_name = $server_obj->{_storage_name};
+	my $sql = qq( UPDATE server SET storage_name = '$storage_name' WHERE name = '$name' );
 	my $sth = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
