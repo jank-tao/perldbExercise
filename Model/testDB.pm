@@ -39,22 +39,29 @@ sub Conn {
 }
 
 
-sub SetNewConn {
-	my ($self, %h_info) = @_;
-}
+# sub SetNewConn {
+# 	my ($self, %h_info) = @_;
+# }
 
 
-sub SelectAll {
-	my ($self, $table_name) = @_;
-	my $sql = "select * from $table_name";
-	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
-	$sth->execute();
+# sub SelectAll {
+# 	my ($self, $table_name) = @_;
+# 	my $sql = "select * from $table_name";
+# 	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
+# 	$sth->execute();
+# 	my $ref_arr = $sth->fetchall_arrayref();
+# 	$sth->finish();
+# 	return $ref_arr;
+# }
+
+sub SelectColumn {
+	my $sth = &doSQL(@_);
 	my $ref_arr = $sth->fetchall_arrayref();
 	$sth->finish();
 	return $ref_arr;
 }
 
-sub Do {
+sub doSQL {
 	my ( $self, $sql ) = @_;
 	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
 	my $status = $sth->execute();
@@ -63,6 +70,11 @@ sub Do {
 	print "sql execute status: $status\n";
 	use Carp::Assert;
 	assert($status > 0) if DEBUG;
+	return $sth;
+}
+
+sub Do {
+	my $sth = &doSQL(@_);
 	$sth->finish();
 }
 
