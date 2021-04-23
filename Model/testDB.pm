@@ -53,10 +53,11 @@ sub doSQL {
 	my ( $self, $sql ) = @_;
 	print "sql: $sql\n";
 	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
+	my $inf_rows = 0;
 	try {
-		$sth->execute();
+		$inf_rows = $sth->execute();
 	} catch {};
-	return $sth;
+	return ($sth, $inf_rows);
 }
 
 sub GetStorageAll {
@@ -73,11 +74,11 @@ sub GetStorageColumn {
 	my ( $self, $column ) = @_;
 	$self->Conn();
 	my $sql = "select $column from storage";
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	my $ref_arr = $sth->fetchall_arrayref();
 	$sth->finish();
 	$self->DisConn();
-	return $ref_arr;
+	return ($ref_arr, $inf_rows);
 }
 
 sub InsertIntoStorage {
@@ -86,9 +87,10 @@ sub InsertIntoStorage {
 	my $name = $sto_obj->{_name};
 	my $capacity = $sto_obj->{_capacity};
 	my $sql = qq( INSERT INTO storage VALUES ('$name', '$capacity'); );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
+	return $inf_rows;
 }
 
 sub DeleteFromStorage {
@@ -96,9 +98,10 @@ sub DeleteFromStorage {
 	$self->Conn();
 	my $name = $sto_obj->{_name};
 	my $sql = qq( DELETE FROM storage WHERE name = '$name' );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
+	return $inf_rows;
 }
 
 sub UpdateCapByName {
@@ -107,9 +110,10 @@ sub UpdateCapByName {
 	my $name = $sto_obj->{_name};
 	my $capacity = $sto_obj->{_capacity};
 	my $sql = qq( UPDATE storage SET capacity = $capacity WHERE name = '$name' );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
+	return $inf_rows;
 }
 
 # -------- storage above --------
@@ -124,11 +128,11 @@ sub GetServerColumn {
 	my ( $self, $column ) = @_;
 	$self->Conn();
 	my $sql = "select $column from server";
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	my $ref_arr = $sth->fetchall_arrayref();
 	$sth->finish();
 	$self->DisConn();
-	return $ref_arr;
+	return ($ref_arr, $inf_rows);
 }
 
 sub GetServerAll {
@@ -145,7 +149,7 @@ sub InsertIntoServer {
 	use Digest::MD5 qw(md5 md5_hex md5_base64);
 	my $checksum = md5_base64($name, $operating_system, $storage_name);
 	my $sql = qq( INSERT INTO server VALUES ('$name', '$operating_system', '$storage_name', '$checksum'); );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
 }
@@ -155,9 +159,10 @@ sub DeleteFromServer {
 	$self->Conn();
 	my $name = $server_obj->{_name};
 	my $sql = qq( DELETE FROM server WHERE name = '$name' );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
+	return $inf_rows;
 }
 
 sub UpdateServerByName {
@@ -166,9 +171,10 @@ sub UpdateServerByName {
 	my $name = $server_obj->{_name};
 	my $storage_name = $server_obj->{_storage_name};
 	my $sql = qq( UPDATE server SET storage_name = '$storage_name' WHERE name = '$name' );
-	my $sth = $self->doSQL($sql);
+	my ($sth, $inf_rows) = $self->doSQL($sql);
 	$sth->finish();
 	$self->DisConn();
+	return $inf_rows;
 }
 
 1;

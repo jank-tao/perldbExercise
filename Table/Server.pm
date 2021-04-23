@@ -28,33 +28,31 @@ sub getInstance {
 sub readName {
 	my ($self) = @_;
 	my $object = new testDB();
-	my $ref_arr = $object->GetServerName();
-	return $ref_arr;
+	return $object->GetServerName();
 }
 
 sub readAll {
 	my ($self) = @_;
 	my $object = new testDB();
-	my $ref_arr = $object->GetServerAll();
-	return $ref_arr;
+	return $object->GetServerAll();
 }
 
 sub createData {
 	my ($self) = @_;
 	my $obj = new testDB();
-	$obj->InsertIntoServer($self);
+	return $obj->InsertIntoServer($self);
 }
 
 sub deleteByName {
 	my ($self) = @_;
 	my $obj = new testDB();
-	$obj->DeleteFromServer($self);
+	return $obj->DeleteFromServer($self);
 }
 
 sub updateStoNameByName {
 	my ($self) = @_;
 	my $obj = new testDB();
-	$obj->UpdateServerByName($self);
+	return $obj->UpdateServerByName($self);
 }
 
 1;

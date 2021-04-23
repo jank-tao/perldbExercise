@@ -28,33 +28,31 @@ sub getInstance {
 sub readName {
 	my ( $self ) = @_;
 	my $object = new testDB();
-	my $ref_arr = $object->GetStorageName();
-	return $ref_arr;
+	return $object->GetStorageName();
 }
 
 sub readAll {
 	my ( $self ) = @_;
 	my $object = new testDB();
-	my $ref_arr = $object->GetStorageAll();
-	return $ref_arr;
+	return $object->GetStorageAll();
 }
 
 sub createData {
 	my ( $self ) = @_;
 	my $obj = new testDB();
-	$obj->InsertIntoStorage($self);
+	return $obj->InsertIntoStorage($self);
 }
 
 sub deleteByName {
 	my ( $self ) = @_;
 	my $obj = new testDB();
-	$obj->DeleteFromStorage($self);
+	return $obj->DeleteFromStorage($self);
 }
 
 sub updateCapByName {
 	my ( $self ) = @_;
 	my $obj = new testDB();
-	$obj->UpdateCapByName($self);
+	return $obj->UpdateCapByName($self);
 }
 
 
