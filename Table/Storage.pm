@@ -14,6 +14,8 @@ sub new {
 		_capacity    => undef,
 		_create_time => undef,
 		_update_time => undef,
+
+		_o_db        => new testDB(),
 	};
 
 	bless ($self, $class);
@@ -27,32 +29,27 @@ sub getInstance {
 
 sub readName {
 	my ( $self ) = @_;
-	my $object = new testDB();
-	return $object->GetStorageName();
+	return $self->{_o_db}->GetStorageName();
 }
 
 sub readAll {
 	my ( $self ) = @_;
-	my $object = new testDB();
-	return $object->GetStorageAll();
+	return $self->{_o_db}->GetStorageAll();
 }
 
 sub createData {
 	my ( $self ) = @_;
-	my $obj = new testDB();
-	return $obj->InsertIntoStorage($self);
+	return $self->{_o_db}->InsertIntoStorage($self);
 }
 
 sub deleteByName {
 	my ( $self ) = @_;
-	my $obj = new testDB();
-	return $obj->DeleteFromStorage($self);
+	return $self->{_o_db}->DeleteFromStorage($self);
 }
 
 sub updateCapByName {
 	my ( $self ) = @_;
-	my $obj = new testDB();
-	return $obj->UpdateCapByName($self);
+	return $self->{_o_db}->UpdateCapByName($self);
 }
 
 

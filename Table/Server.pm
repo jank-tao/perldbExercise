@@ -14,6 +14,8 @@ sub new {
 		_checksum         => undef,
 		_create_time      => undef,
 		_update_time      => undef,
+
+		_o_db             => new testDB(),
 	};
 
 	bless($self, $class);
@@ -27,32 +29,27 @@ sub getInstance {
 
 sub readName {
 	my ($self) = @_;
-	my $object = new testDB();
-	return $object->GetServerName();
+	return $self->{_o_db}->GetServerName();
 }
 
 sub readAll {
 	my ($self) = @_;
-	my $object = new testDB();
-	return $object->GetServerAll();
+	return $self->{_o_db}->GetServerAll();
 }
 
 sub createData {
 	my ($self) = @_;
-	my $obj = new testDB();
-	return $obj->InsertIntoServer($self);
+	return $self->{_o_db}->InsertIntoServer($self);
 }
 
 sub deleteByName {
 	my ($self) = @_;
-	my $obj = new testDB();
-	return $obj->DeleteFromServer($self);
+	return $self->{_o_db}->DeleteFromServer($self);
 }
 
 sub updateStoNameByName {
 	my ($self) = @_;
-	my $obj = new testDB();
-	return $obj->UpdateServerByName($self);
+	return $self->{_o_db}->UpdateServerByName($self);
 }
 
 1;

@@ -15,8 +15,11 @@ use Server;
 
 sub OutputRows {
 	my $ref_rows = shift;
-	foreach my $data (@$ref_rows) {
-		print join("\t", @$data) . "\n";
+	foreach my $row (@$ref_rows) {
+		foreach my $data (@$row) {
+			print $data . "\t" if defined($data);
+		}
+		print "\n";
 	}
 }
 
@@ -99,17 +102,17 @@ sub updateStoNameServerByName {
 }
 
 
-# &readNameFromStorage();
-# &readAllFromStorage();
-# &createStorage({name => 'sto88', capacity => 200});
-# &deleteStorageByName({name => 'sto1',});
-# &updateCapacityStorageByName({name => 'sto1', capacity => 233});
-#
-# &readNameFromServer();
-# &readAllFromServer();
-# &createServer({name => 'vm88', operating_system => 'Windows8', storage_name => 'sto3'});
-# &deleteServerByName({name => 'vm8',});
-# &updateStoNameServerByName({name => 'vm1', storage_name => 'sto2'});
+&readNameFromStorage();
+&readAllFromStorage();
+&createStorage({name => 'sto88', capacity => 200});
+&deleteStorageByName({name => 'sto1',});
+&updateCapacityStorageByName({name => 'sto1', capacity => 233});
+
+&readNameFromServer();
+&readAllFromServer();
+&createServer({name => 'vm88', operating_system => 'Windows8', storage_name => 'sto3'});
+&deleteServerByName({name => 'vm8',});
+&updateStoNameServerByName({name => 'vm1', storage_name => 'sto2'});
 
 
 1;

@@ -1,12 +1,11 @@
-#!/usr/bin/perl -w
-
-
-use strict;
-use warnings;
+#!/usr/bin/perl
+BEGIN {
+	push( @INC, 'C:/StrawberryPerl/perl/site/lib/HTML/' );
+}
 use HTML::Template;
 
 # open the html template
-my $template = HTML::Template->new(filename => './View/test.tmpl');
+my $template = HTML::Template->new(filename => './View/main.tmpl');
 
 # fill in some parameters
 $template->param(HOME => $ENV{HOME});
