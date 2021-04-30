@@ -3,11 +3,14 @@
 BEGIN {
 	push( @INC, './Model/' );
 	push( @INC, './Table/' );
+	push( @INC, '/home/C5323461/perl5/lib/perl5/x86_64-linux-gnu-thread-multi');
+	push( @INC, './' );
+	push( @INC, '/home/C5323461/perl5/lib/perl5' );
+	push( @INC, '/home/C5323461/.cpanm');
 }
 
 use strict;
 use warnings;
-use Time::Moment;
 use testDB;
 use Storage;
 use Server;
@@ -23,18 +26,28 @@ sub OutputRows {
 	}
 }
 
+sub OutputHashRows {
+	my $ref_rows = shift;
+	#use Data::Dumper;
+	#my @hash = Dumper($ref_rows);
+	#print @hash[0];
+	#print $ref_rows->[0]->{name};
+	#return %hash;
+}
+
 sub readNameFromStorage {
 	my $sto_object = &Storage::getInstance();
 	my ($ref_rows, $inf_rows) = $sto_object->readName();
-	&OutputRows($ref_rows);
-	return $inf_rows;
+	#&OutputRows($ref_rows);
+	return $ref_rows;
 }
 
 sub readAllFromStorage {
 	my $sto_object = &Storage::getInstance();
 	my ($ref_rows, $inf_rows) = $sto_object->readAll();
-	&OutputRows($ref_rows);
-	return $inf_rows;
+	#&OutputRows($ref_rows);
+	#&OutputHashRows($ref_rows);
+	return $ref_rows;
 }
 
 sub createStorage {
@@ -102,17 +115,37 @@ sub updateStoNameServerByName {
 }
 
 
-&readNameFromStorage();
-&readAllFromStorage();
-&createStorage({name => 'sto88', capacity => 200});
-&deleteStorageByName({name => 'sto1',});
-&updateCapacityStorageByName({name => 'sto1', capacity => 233});
+# &readNameFromStorage();
+# &readAllFromStorage();
+# &createStorage({name => 'sto88', capacity => 200});
+# &deleteStorageByName({name => 'sto1',});
+# &updateCapacityStorageByName({name => 'sto1', capacity => 233});
+#
+# &readNameFromServer();
+# &readAllFromServer();
+# &createServer({name => 'vm88', operating_system => 'Windows8', storage_name => 'sto3'});
+# &deleteServerByName({name => 'vm8',});
+# &updateStoNameServerByName({name => 'vm1', storage_name => 'sto2'});
 
-&readNameFromServer();
-&readAllFromServer();
-&createServer({name => 'vm88', operating_system => 'Windows8', storage_name => 'sto3'});
-&deleteServerByName({name => 'vm8',});
-&updateStoNameServerByName({name => 'vm1', storage_name => 'sto2'});
+use HTML::Template;
 
+# open the html template
+my $template = HTML::Template->new(filename => './View/main.tmpl');
+
+# fill in some parameters
+$template->param(HOME => $ENV{HOME});
+$template->param(PATH => $ENV{PATH});
+
+
+print "Content-Type: text/html\n\n";
+
+
+my $ref = &readAllFromStorage();
+$template->param(GETDATA => $ref);
+
+
+
+# send the obligatory Content-Type and print the template output
+print $template->output;
 
 1;

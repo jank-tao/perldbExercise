@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package testDB;
 
 use strict;
@@ -31,10 +29,10 @@ sub Conn {
 	my $dbh = $self->{_dbh} = DBI->connect($database, $self->{_db_user}, $self->{_db_passwd}) or die "cant connect!";
 
 	if ($dbh) {
-		print "postgresql connect successful!\n";
+		#print "postgresql connect successful!\n";
 	}
 	else {
-		print "pgconnect failed!\n";
+		#print "pgconnect failed!\n";
 	}
 	return 0;
 }
@@ -51,7 +49,7 @@ sub Do {
 
 sub doSQL {
 	my ( $self, $sql ) = @_;
-	print "sql: $sql\n";
+	#print "sql: $sql\n";
 	my $sth = $self->{_dbh}->prepare($sql) or die "Syntax error: $!\n";
 	my $inf_rows = 0;
 	try {
@@ -75,7 +73,7 @@ sub GetStorageColumn {
 	$self->Conn();
 	my $sql = "select $column from storage";
 	my ($sth, $inf_rows) = $self->doSQL($sql);
-	my $ref_arr = $sth->fetchall_arrayref();
+	my $ref_arr = $sth->fetchall_arrayref({});
 	$sth->finish();
 	$self->DisConn();
 	return ($ref_arr, $inf_rows);

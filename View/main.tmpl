@@ -4,5 +4,35 @@
 My Home Directory is <TMPL_VAR NAME=HOME>
 <p>
 My Path is set to <TMPL_VAR NAME=PATH>
+<p>
+
+<form name = "input" action = "/perldbExercise/main.pl" method = "post">
+getData:
+<input type = "submit" name = "getData" value = "Select"><br>
+<table border = "1">
+<tr style="color:blue">
+    <td>Name</td>
+    <td>Capacity</td>
+    <td>Create_time</td>
+    <td>Update_time</td>
+</tr>
+<TMPL_LOOP NAME=GETDATA>
+<tr>
+    <td><TMPL_VAR NAME="NAME"></td>
+    <td><TMPL_VAR NAME="CAPACITY"></td>
+    <td><TMPL_VAR NAME="CREATE_TIME"></td>
+    <td><TMPL_VAR NAME="UPDATE_TIME"></td>
+</tr>
+</TMPL_LOOP>
+</table>
+</form>
+
+<form name = "input" action = "/perldbExercise/main.pl" method = "post">
+name: <input type = "text" name = "name">
+capacity: <input type = "text" name = "capacity">
+<input type = "submit" Value = "Insert">
+</form>
+
+
 </body>
 </html>
