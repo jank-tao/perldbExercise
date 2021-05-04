@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+package main;
 
 BEGIN {
 	push( @INC, './Model/' );
@@ -127,25 +128,5 @@ sub updateStoNameServerByName {
 # &deleteServerByName({name => 'vm8',});
 # &updateStoNameServerByName({name => 'vm1', storage_name => 'sto2'});
 
-use HTML::Template;
-
-# open the html template
-my $template = HTML::Template->new(filename => './View/main.tmpl');
-
-# fill in some parameters
-$template->param(HOME => $ENV{HOME});
-$template->param(PATH => $ENV{PATH});
-
-
-print "Content-Type: text/html\n\n";
-
-
-my $ref = &readAllFromStorage();
-$template->param(GETDATA => $ref);
-
-
-
-# send the obligatory Content-Type and print the template output
-print $template->output;
 
 1;

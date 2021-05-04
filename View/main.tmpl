@@ -1,14 +1,16 @@
 <html>
 <head><title>Test Template</title></head>
 <body>
+
+<!--
 My Home Directory is <TMPL_VAR NAME=HOME>
 <p>
 My Path is set to <TMPL_VAR NAME=PATH>
 <p>
+-->
 
-<form name = "input" action = "/perldbExercise/main.pl" method = "post">
-getData:
-<input type = "submit" name = "getData" value = "Select"><br>
+<form name = "input" action = "/perldbExercise/main.cgi" method = "post">
+<input type = "submit" name = "select" value = "Select"><br>
 <table border = "1">
 <tr style="color:blue">
     <td>Name</td>
@@ -27,12 +29,16 @@ getData:
 </table>
 </form>
 
-<form name = "input" action = "/perldbExercise/main.pl" method = "post">
+<form name = "input" action = "/perldbExercise/main.cgi" method = "post">
 name: <input type = "text" name = "name">
 capacity: <input type = "text" name = "capacity">
-<input type = "submit" Value = "Insert">
+<input type = "submit" Value = "Insert", name = "insert">
 </form>
 
+<form name = "Delete" action = "/perldbExercise/main.cgi" method = "post">
+sto_name: <input type = "text" name = "sto_name">
+<input type = "submit" Value = "Delete" name = "delete">
+</form>
 
 </body>
 </html>
