@@ -127,7 +127,7 @@ sub GetServerColumn {
 	$self->Conn();
 	my $sql = "select $column from server";
 	my ($sth, $inf_rows) = $self->doSQL($sql);
-	my $ref_arr = $sth->fetchall_arrayref();
+	my $ref_arr = $sth->fetchall_arrayref({});
 	$sth->finish();
 	$self->DisConn();
 	return ($ref_arr, $inf_rows);

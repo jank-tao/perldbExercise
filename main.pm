@@ -80,15 +80,15 @@ sub updateCapacityStorageByName {
 sub readNameFromServer {
 	my $server_obj = &Server::getInstance();
 	my ($ref_rows, $inf_rows) = $server_obj->readName();
-	&OutputRows($ref_rows);
-	return $inf_rows;
+	#&OutputRows($ref_rows);
+	return $ref_rows;
 }
 
 sub readAllFromServer {
 	my $server_obj = &Server::getInstance();
 	my ($ref_rows, $inf_rows) = $server_obj->readAll();
-	&OutputRows($ref_rows);
-	return $inf_rows;
+	#&OutputRows($ref_rows);
+	return $ref_rows;
 }
 
 sub createServer {

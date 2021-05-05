@@ -13,52 +13,8 @@ use HTML::Template;
 # open the html template
 my $template = HTML::Template->new(filename => './View/main.tmpl');
 
-# fill in some parameters
-# $template->param(HOME => $ENV{HOME});
-# $template->param(PATH => $ENV{PATH});
-
-# local ($buffer, @pairs, $pair, $name, $value, %FORM);
-# $ENV{'REQUEST_METHOD'} =~ tr/a-z/A-Z/;
-# if ($ENV{'REQUEST_METHOD'} eq "POST") {
-# 	read(STDIN, $buffer, $ENV{CONTENT_LENGTH});
-# } else {
-# 	$buffer = $ENV{'QUERY_STRING'};
-# }
-#
-# @pairs = split(/&/, $buffer);
-# foreach $pair (@pairs) {
-# 	($name, $value) = split(/=/, $pair);
-# 	$value =~ tr/+/ /;
-# 	$value =~ s/%(..)/pack("C", hex($1))/eg;
-#    $FORM{$name} = $value;
-# }
-# $name = $FORM{name};
-# $url  = $FORM{url};
-
-
 print "Content-Type: text/html\n\n";
 
-# Select
-# my $ref = &readAllFromStorage();
-# $template->param(GETDATA => $ref);
-
-# Insert
-# my $request_method = $ENV{'REQUEST_METHOD'};
-# if ($request_method eq 'POST') {
-# 	read(STDIN, $query_string, $ENV{'CONTENT_LENGTH'});
-# 	my @pairs = split('&', $query_string);
-# 	local $attr = {};
-# 	foreach $pair (@pairs) {
-# 		my ($name, $value) = split('=', $pair);
-# 		$attr{$name} = $value;
-# 	}
-# 	print %$attr;
-# 	&createStorage({name => $attr{name}, capacity => $attr{capacity}});
-# } else {
-# 	print "what fk i am ?\n";
-# }
-
-# Delete
 my $request_method = $ENV{'REQUEST_METHOD'};
 if ($request_method eq 'POST') {
 	read(STDIN, $query_string, $ENV{'CONTENT_LENGTH'});
@@ -80,7 +36,15 @@ if ($request_method eq 'POST') {
 	} elsif ( exists($attr{"delete"}) ) {
 		&deleteStorageByName({name => $attr{sto_name},});
 	} elsif ( exists($attr{"update"}) ) {
-		print "i am update\n";
+		&updateCapacityStorageByName({name => $attr{name}, capacity => $attr{capacity}});
+	} elsif ( exists($attr{"server_select"}) ) {
+		$template->param(SERVER_DETAIL => &readAllFromServer());
+	} elsif ( exists($attr{"server_insert"}) ) {
+		&createServer({name => $attr{name}, operating_system => $attr{operating_system}, storage_name => $attr{storage_name}});
+	} elsif ( exists($attr{"server_delete"}) ) {
+		&deleteServerByName({name => $attr{vm_name},});
+	} elsif ( exists($attr{"server_update"}) ) {
+		&updateStoNameServerByName({name => $attr{vm_name}, storage_name => $attr{storage_name}});
 	} else {
 		print "i am others\n";
 	}
